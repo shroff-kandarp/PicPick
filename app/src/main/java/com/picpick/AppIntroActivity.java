@@ -38,6 +38,7 @@ public class AppIntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_intro);
 
+        /////////
         generalFunc = new GeneralFunctions(getActContext());
         circlePageIndictor = (CirclePageIndicator) findViewById(R.id.circlePageIndictor);
         skipTxt = (TextView) findViewById(R.id.skipTxt);
