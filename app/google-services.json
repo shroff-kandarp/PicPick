@@ -1,25 +1,33 @@
 {
   "project_info": {
-    "project_number": "844690422315",
-    "project_id": "firebase-chipngift"
+    "project_number": "4986285976",
+    "project_id": "firebase-picpick"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:844690422315:android:4caab3773f72205b",
+        "mobilesdk_app_id": "1:4986285976:android:f27b1c75c072ecce",
         "android_client_info": {
           "package_name": "com.picpick"
         }
       },
       "oauth_client": [
         {
-          "client_id": "844690422315-lncei89e1h4phe35nt75656vltocsdne.apps.googleusercontent.com",
+          "client_id": "4986285976-3lp3hkl2o54js98s2502dqu651g9ph72.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.picpick",
+            "certificate_hash": "9D75DED73A9A41EBBA8C7F73BCF59B3F6A4706FA"
+          }
+        },
+        {
+          "client_id": "4986285976-qkljtj97fm4s02guo26985su7b4ui3iq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDl1ZznPwWgaVjF6JEFAXURRwnhSA096u0"
+          "current_key": "AIzaSyBIebIe-0YKP5pnxhVhgFo0XGU_ezRedQc"
         }
       ],
       "services": {
