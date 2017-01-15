@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar_include"
+            layout="@layout/design_toolbar_main" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.view.floatingbutton.FloatingActionsMenu
+                android:id="@+id/multiple_actions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginEnd="15dp"
+                app:fab_addButtonColorNormal="@color/appThemeColor"
+                app:fab_addButtonColorPressed="@color/appThemeColor_transparent"
+                app:fab_addButtonPlusIconColor="@color/whiteColor"
+                app:fab_addButtonSize="mini"
+                app:fab_labelStyle="@style/menu_labels_style"
+                app:fab_labelsPosition="left">
+
+                <com.view.floatingbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/white_pressed"
+                    app:fab_size="mini"
+                    app:fab_title="Create an album" />
+
+                <com.view.floatingbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/white_pressed"
+                    app:fab_size="mini"
+                    app:fab_title="My gallery" />
+
+
+                <com.view.floatingbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/white_pressed"
+                    app:fab_size="mini"
+                    app:fab_title="My edits" />
+
+
+            </com.view.floatingbutton.FloatingActionsMenu>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/left_linear"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#FFFFFF"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/header_area_noLogin"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:background="@color/appThemeColor_transparent">
+
+                <ImageView
+                    android:id="@+id/logoMenu"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:padding="15dp"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/cosmoTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/logoMenu"
+                    android:gravity="center"
+                    android:text="Pic Pick"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cosmoTxt"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="Professional photo editor guide !!"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/header_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/appThemeColor_transparent"
+                android:visibility="gone">
+
+                <com.view.SelectableRoundedImageView
+                    android:id="@+id/userImgView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="25dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_no_pic_user"
+                    app:sriv_border_color="@color/appThemeColor"
+                    app:sriv_border_width="2dip"
+                    app:sriv_left_bottom_corner_radius="20dip"
+                    app:sriv_left_top_corner_radius="20dip"
+                    app:sriv_oval="true"
+                    app:sriv_right_bottom_corner_radius="20dip"
+                    app:sriv_right_top_corner_radius="20dip" />
+
+                <TextView
+                    android:id="@+id/userNameTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/userImgView"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="true"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/txt_size_18" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+        <ListView
+            android:id="@+id/menuListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginTop="10dp"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp" />
+    </LinearLayout>
+</android.support.v4.widget.DrawerLayout>
