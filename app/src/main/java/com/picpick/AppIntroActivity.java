@@ -32,6 +32,7 @@ public class AppIntroActivity extends AppCompatActivity {
 
     GeneralFunctions generalFunc;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
