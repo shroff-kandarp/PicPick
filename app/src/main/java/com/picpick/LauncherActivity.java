@@ -38,7 +38,7 @@ public class LauncherActivity extends AppCompatActivity {
                 if (generalFunc.isUserLoggedIn()) {
                     (new StartActProcess(getActContext())).startAct(DashboardActivity.class);
                 } else if (generalFunc.isFirstLaunchFinished()) {
-                    (new StartActProcess(getActContext())).startAct(MainActivity.class);
+                    (new StartActProcess(getActContext())).startAct(LoginActivity.class);
                 } else {
                     (new StartActProcess(getActContext())).startAct(AppIntroActivity.class);
                 }

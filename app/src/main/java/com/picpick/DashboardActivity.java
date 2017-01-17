@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.adapter.DrawerAdapter;
-import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.squareup.picasso.Picasso;
 import com.utils.Utils;
@@ -70,7 +69,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             ((TextView) findViewById(R.id.userNameTxt)).setText(generalFunc.retriveValue(Utils.name_key));
 
             if (generalFunc.retriveValue(Utils.LOGIN_TYPE_key).equals(Utils.SOCIAL_LOGIN_GOOGLE_key_value)) {
-                loadImageFromGoogle(generalFunc.retriveValue(Utils.SOCIAL_ID_key));
+                //loadImageFromGoogle(generalFunc.retriveValue(Utils.SOCIAL_ID_key));
             } else if (generalFunc.retriveValue(Utils.LOGIN_TYPE_key).equals(Utils.SOCIAL_LOGIN_FACEBOOK_key_value)) {
 
                 String uerProfileImageUrl = "https://graph.facebook.com/" + generalFunc.retriveValue(Utils.SOCIAL_ID_key) + "/picture?type=large";
@@ -84,35 +83,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
     }
 
-    public void loadImageFromGoogle(String id) {
-        String url_google_profile_photo = "https://www.googleapis.com/plus/v1/people/" + id +
-                "?fields=image&key=AIzaSyDl1ZznPwWgaVjF6JEFAXURRwnhSA096u0";
-        Utils.printLog("Google Url", "::" + url_google_profile_photo);
-        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(url_google_profile_photo, true);
-        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
-            @Override
-            public void setResponse(String responseString) {
 
-                Utils.printLog("Response", "::" + responseString);
-
-                if (responseString != null && !responseString.equals("")) {
-
-                    String image_obj = generalFunc.getJsonValue("image", responseString);
-
-                    if (!image_obj.equals("")) {
-                        String uerProfileImageUrl = generalFunc.getJsonValue("url", image_obj);
-                        Picasso.with(getActContext())
-                                .load(uerProfileImageUrl)
-                                .placeholder(R.mipmap.ic_no_pic_user)
-                                .error(R.mipmap.ic_no_pic_user)
-                                .into((SelectableRoundedImageView) findViewById(R.id.userImgView));
-                    }
-                } else {
-                }
-            }
-        });
-        exeWebServer.execute();
-    }
 
     public class setOnClickList implements View.OnClickListener {
 

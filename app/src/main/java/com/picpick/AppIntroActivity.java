@@ -127,7 +127,7 @@ public class AppIntroActivity extends AppCompatActivity {
     }
 
     public void startAppLoginAct() {
-        new StartActProcess(AppIntroActivity.this).startAct(MainActivity.class);
+        new StartActProcess(AppIntroActivity.this).startAct(LoginActivity.class);
         ActivityCompat.finishAffinity(this);
     }
 
