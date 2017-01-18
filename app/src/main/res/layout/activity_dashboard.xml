@@ -19,6 +19,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:onClick="onSelectImageClick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="Select Image"
+                    android:layout_gravity="center"/>
+
+
+                <ImageView
+                    android:id="@+id/imgCroped"
+                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center"
+                    android:layout_width="200dp"
+                    android:background="@mipmap/ic_no_pic_user"
+                    android:layout_height="200dp" />
+
+
+            </LinearLayout>
+
+
+
+
+
+
             <com.view.floatingbutton.FloatingActionsMenu
                 android:id="@+id/multiple_actions"
                 android:layout_width="wrap_content"

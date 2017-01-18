@@ -1,9 +1,17 @@
 package com.picpick;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,25 +22,28 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.adapter.DrawerAdapter;
 import com.general.files.GeneralFunctions;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 import com.utils.Utils;
 import com.view.CreateRoundedView;
 import com.view.SelectableRoundedImageView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DashboardActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     DrawerLayout mDrawerLayout;
     ImageView menuImgView;
-
+    Uri mCropImageUri;
     ListView menuListView;
     DrawerAdapter drawerAdapter;
     public ArrayList<String[]> list_menu_items;
-
+    ImageView img;
     TextView titleTxt;
 
     GeneralFunctions generalFunc;
@@ -54,6 +65,8 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         menuListView = (ListView) findViewById(R.id.menuListView);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         titleTxt = (TextView) findViewById(R.id.titleTxt);
+
+        img = (ImageView) findViewById(R.id.imgCroped);
 
         menuImgView.setColorFilter(Color.parseColor("#FFFFFF"));
         menuImgView.setOnClickListener(new setOnClickList());
@@ -82,6 +95,73 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         }
 
     }
+
+
+    public void onSelectImageClick(View view) {
+        CropImage.startPickImageActivity(this);
+    }
+
+    @Override
+    @SuppressLint("NewApi")
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // handle result of pick image chooser
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri imageUri = CropImage.getPickImageResultUri(this, data);
+
+            // For API >= 23 we need to check specifically that we have permissions to read external storage.
+            if (CropImage.isReadExternalStoragePermissionsRequired(this, imageUri)) {
+                // request permissions and handle the result in onRequestPermissionsResult()
+                mCropImageUri = imageUri;
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},   CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+            } else {
+                // no permissions required or already grunted, can start crop image activity
+                startCropImageActivity(imageUri);
+            }
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    img.setImageBitmap(bitmap);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
+            if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // required permissions granted, start crop image activity
+                startCropImageActivity(mCropImageUri);
+            } else {
+                Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .start(this);
+    }
+
+
+
+
+
+
+
 
 
 
