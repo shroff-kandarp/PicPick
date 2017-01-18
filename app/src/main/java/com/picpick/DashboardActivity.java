@@ -91,6 +91,8 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                         .placeholder(R.mipmap.ic_no_pic_user)
                         .error(R.mipmap.ic_no_pic_user)
                         .into((SelectableRoundedImageView) findViewById(R.id.userImgView));
+
+                Utils.printLog(Utils.FACEBOOK_ACCESS_TOKEN_KEY,"::"+generalFunc.retriveValue(Utils.FACEBOOK_ACCESS_TOKEN_KEY));
             }
         }
 
@@ -155,15 +157,6 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         CropImage.activity(imageUri)
                 .start(this);
     }
-
-
-
-
-
-
-
-
-
 
     public class setOnClickList implements View.OnClickListener {
 

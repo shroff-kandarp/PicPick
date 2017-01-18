@@ -39,6 +39,9 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
         myPDialog = new MyProgressDialog(mContext, false, "Loading");
         myPDialog.show();
 
+        final String accessToken = loginResult.getAccessToken().getToken();
+        Utils.printLog("AccessToken","::"+loginResult.getAccessToken().getToken());
+        Utils.printLog("AccessTokenToString","::"+loginResult.getAccessToken().toString());
         GraphRequest request = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -48,6 +51,7 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
                             GraphResponse response) {
                         // Application code
                         myPDialog.close();
+                        Utils.printLog("response:", "::" + response.toString());
                         if (response.getError() != null) {
                             // handle error
                             Log.d("onError", "onError:" + response.getError());
@@ -61,7 +65,7 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
                             String last_name_str = generalFunc.getJsonValue("last_name", me.toString());
                             String fb_id_str = generalFunc.getJsonValue("id", me.toString());
 
-                            registerFbUser("", first_name_str, last_name_str, fb_id_str);
+                            registerFbUser("", first_name_str, last_name_str, fb_id_str, accessToken);
 
                             generalFunc.logOUTFrmFB();
                         }
@@ -85,11 +89,12 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
         generalFunc.showGeneralMessage("Facebook Error", "Please try again:");
     }
 
-    public void registerFbUser(final String email, final String fName, final String lName, final String fbId) {
+    public void registerFbUser(final String email, final String fName, final String lName, final String fbId, String accessToken) {
 
         generalFunc.storeUserData(fbId);
-        generalFunc.storedata("FNAME",fName);
-        generalFunc.storedata("LNAME",lName);
+        generalFunc.storedata("FNAME", fName);
+        generalFunc.storedata("LNAME", lName);
+        generalFunc.storedata(Utils.FACEBOOK_ACCESS_TOKEN_KEY, accessToken);
 
         Bundle bn = new Bundle();
         bn.putString("FNAME", fName);
@@ -99,18 +104,16 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
 
         HashMap<String, String> userData = new HashMap<>();
         userData.put(Utils.email_key, email);
-        userData.put(Utils.name_key, fName+" "+lName);
+        userData.put(Utils.name_key, fName + " " + lName);
         userData.put(Utils.SOCIAL_ID_key, fbId);
-       // userData.put(Utils.SOCIAL_ID_key, acct.getId());
+        // userData.put(Utils.SOCIAL_ID_key, acct.getId());
         userData.put(Utils.LOGIN_TYPE_key, Utils.SOCIAL_LOGIN_FACEBOOK_key_value);
 
 
         generalFunc.setMemberData(userData);
 
-
-
         new StartActProcess(mContext).startActWithData(DashboardActivity.class, bn);
 
-        ActivityCompat.finishAffinity((Activity)mContext);
+        ActivityCompat.finishAffinity((Activity) mContext);
     }
 }

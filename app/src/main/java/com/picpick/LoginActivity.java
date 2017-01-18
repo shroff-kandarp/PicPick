@@ -1,4 +1,4 @@
-    package com.picpick;
+package com.picpick;
 
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +40,7 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     Button googleLoginBtn;
-   // GoogleApiClient mGoogleApiClient;
+    // GoogleApiClient mGoogleApiClient;
 
     GeneralFunctions generalFunc;
     CallbackManager callbackManager;
@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         loginButton = new LoginButton(getActContext());
         callbackManager = CallbackManager.Factory.create();
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_about_me"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_about_me","user_photos"));
         loginButton.registerCallback(callbackManager, new RegisterFbLoginResCallBack(getActContext()));
 
         //buildGoogleApi();
@@ -89,9 +89,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
 
-
-
     }
+
     public class setOnClickList implements View.OnClickListener {
 
         @Override
