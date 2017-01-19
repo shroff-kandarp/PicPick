@@ -44,7 +44,7 @@ public class FacebookPhotoRecyclerAdapter extends RecyclerView.Adapter<FacebookP
 
         HashMap<String, String> map = list_item.get(position);
 
-        String item = map.get("ImgPath");
+        String item = map.get("PHOTO_PATH");
 
         Picasso.with(mContext)
                 .load(item)

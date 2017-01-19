@@ -51,6 +51,7 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
                             GraphResponse response) {
                         // Application code
                         myPDialog.close();
+                        Utils.printLog("responseObj:", "::" + me.toString());
                         Utils.printLog("response:", "::" + response.toString());
                         if (response.getError() != null) {
                             // handle error
