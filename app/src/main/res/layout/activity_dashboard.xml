@@ -25,29 +25,52 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <Button
-                    android:onClick="onSelectImageClick"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
-                    android:text="Select Image"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="Select image from"
+                    android:textColor="#2F2F2F"
+                    android:textSize="@dimen/txt_size_20" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:onClick="onFacebookImageClick"
+                    android:text="Facebook" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="OR"
+                    android:textColor="#2F2F2F"
+                    android:textSize="@dimen/txt_size_18" />
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:onClick="onSelectImageClick"
+                    android:text="Gallery" />
 
 
                 <ImageView
                     android:id="@+id/imgCroped"
-                    android:layout_marginTop="30dp"
-                    android:layout_gravity="center"
                     android:layout_width="200dp"
-                    android:background="@mipmap/ic_no_pic_user"
-                    android:layout_height="200dp" />
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:background="@mipmap/ic_no_pic_user" />
 
 
             </LinearLayout>
-
-
-
-
 
 
             <com.view.floatingbutton.FloatingActionsMenu

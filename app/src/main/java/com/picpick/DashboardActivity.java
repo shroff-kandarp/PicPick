@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.adapter.DrawerAdapter;
 import com.general.files.GeneralFunctions;
+import com.general.files.StartActProcess;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.utils.Utils;
@@ -92,12 +93,15 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                         .error(R.mipmap.ic_no_pic_user)
                         .into((SelectableRoundedImageView) findViewById(R.id.userImgView));
 
-                Utils.printLog(Utils.FACEBOOK_ACCESS_TOKEN_KEY,"::"+generalFunc.retriveValue(Utils.FACEBOOK_ACCESS_TOKEN_KEY));
+                Utils.printLog(Utils.FACEBOOK_ACCESS_TOKEN_KEY, "::" + generalFunc.retriveValue(Utils.FACEBOOK_ACCESS_TOKEN_KEY));
             }
         }
 
     }
 
+    public void onFacebookImageClick(View v) {
+        (new StartActProcess(getActContext())).startActForResult(FacebookPhotosActivity.class, Utils.ACT_REQ_CODE_FACEBOO_PHOTO_SELECT);
+    }
 
     public void onSelectImageClick(View view) {
         CropImage.startPickImageActivity(this);
@@ -114,7 +118,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             if (CropImage.isReadExternalStoragePermissionsRequired(this, imageUri)) {
                 // request permissions and handle the result in onRequestPermissionsResult()
                 mCropImageUri = imageUri;
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},   CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
             } else {
                 // no permissions required or already grunted, can start crop image activity
                 startCropImageActivity(imageUri);
