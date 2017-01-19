@@ -47,9 +47,9 @@ public class FacebookAlbumRecyclerAdapter extends RecyclerView.Adapter<FacebookA
 
 
         if (item.length() >= 1) {
-            viewHolder.headerTxt.setText(item.charAt(0));
+            viewHolder.albumNameHTxt.setText(item.substring(0, 1));
         } else {
-            viewHolder.headerTxt.setText("--");
+            viewHolder.albumNameHTxt.setText("--");
         }
         viewHolder.albumNameTxt.setText(item);
         viewHolder.contentView.setOnClickListener(new View.OnClickListener() {
@@ -64,14 +64,14 @@ public class FacebookAlbumRecyclerAdapter extends RecyclerView.Adapter<FacebookA
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView headerTxt;
+        public TextView albumNameHTxt;
         public TextView albumNameTxt;
 
         public LinearLayout contentView;
 
         public ViewHolder(View view) {
             super(view);
-            headerTxt = (TextView) view.findViewById(R.id.headerTxt);
+            albumNameHTxt = (TextView) view.findViewById(R.id.albumNameHTxt);
             albumNameTxt = (TextView) view.findViewById(R.id.albumNameTxt);
             contentView = (LinearLayout) view.findViewById(R.id.contentView);
         }
