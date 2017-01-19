@@ -11,6 +11,7 @@ import com.facebook.login.LoginManager;
 import com.utils.CommonUtilities;
 import com.utils.Utils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -149,6 +150,56 @@ public class GeneralFunctions {
         }
 
         return "";
+    }
+
+    public JSONArray getJsonArr(String key, String response) {
+
+        try {
+            JSONObject obj_temp = new JSONObject(response);
+
+            JSONArray arr = obj_temp.getJSONArray("key");
+
+            if (arr != null) {
+                return arr;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return (new JSONArray());
+        }
+
+        return (new JSONArray());
+    }
+
+    public boolean isJsonArrayKeyAvail(String key, String responseString) {
+
+        try {
+            JSONObject obj = new JSONObject(responseString);
+            JSONArray arr = obj.getJSONArray("key");
+
+            if (arr != null) {
+                return true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public JSONObject getJsonObject(JSONArray arr, int position) {
+        try {
+            JSONObject obj_temp = arr.getJSONObject(position);
+
+            return obj_temp;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+
     }
 
     public void logOUTFrmFB() {

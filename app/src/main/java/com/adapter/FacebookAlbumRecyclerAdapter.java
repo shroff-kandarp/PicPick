@@ -43,7 +43,7 @@ public class FacebookAlbumRecyclerAdapter extends RecyclerView.Adapter<FacebookA
 
         HashMap<String, String> map = list_item.get(position);
 
-        String item = map.get("AlbumName");
+        String item = map.get("ALBUM_NAME");
 
 
         if (item.length() >= 1) {
