@@ -74,7 +74,7 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
 
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,first_name,last_name,email");
+        parameters.putString("fields", "id,name,first_name,last_name,email,photos");
         request.setParameters(parameters);
         request.executeAsync();
     }
