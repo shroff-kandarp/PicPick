@@ -157,7 +157,7 @@ public class GeneralFunctions {
         try {
             JSONObject obj_temp = new JSONObject(response);
 
-            JSONArray arr = obj_temp.getJSONArray("key");
+            JSONArray arr = obj_temp.getJSONArray(key);
 
             if (arr != null) {
                 return arr;
@@ -176,7 +176,7 @@ public class GeneralFunctions {
 
         try {
             JSONObject obj = new JSONObject(responseString);
-            JSONArray arr = obj.getJSONArray("key");
+            JSONArray arr = obj.getJSONArray(key);
 
             if (arr != null) {
                 return true;
