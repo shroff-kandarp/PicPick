@@ -23,7 +23,8 @@ public class DownloadImage extends AsyncTask<Void, Void, Bitmap> {
     ImageDownloadListener imgDownloadList = null;
     MyProgressDialog myPDialog;
     Context mContext;
-    public DownloadImage(Context mContext,String url) {
+
+    public DownloadImage(Context mContext, String url) {
         this.mContext = mContext;
         this.url = url;
     }
