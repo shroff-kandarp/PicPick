@@ -40,6 +40,7 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
         myPDialog.show();
 
         final String accessToken = loginResult.getAccessToken().getToken();
+        generalFunc.storedata("AT",accessToken);
         Utils.printLog("AccessToken","::"+loginResult.getAccessToken().getToken());
         Utils.printLog("AccessTokenToString","::"+loginResult.getAccessToken().toString());
         GraphRequest request = GraphRequest.newMeRequest(

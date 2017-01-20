@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -46,8 +47,13 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     public ArrayList<String[]> list_menu_items;
     ImageView img;
     TextView titleTxt;
-
     GeneralFunctions generalFunc;
+
+
+    private InstagramApp instaObj;
+    public static final String CLIENT_ID = "c78d0e33cbcb440db85ff8f77bdcde00";
+    public static final String CLIENT_SECRET = "ee2c99883f2f4e378f4ab413dbad66ce ";
+    public static final String CALLBACK_URL = "https://www.instagram.com/";
 
 
     @Override
@@ -97,7 +103,36 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             }
         }
 
+
+
+
+
+
+
+
     }
+
+    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
+
+        @Override
+        public void onSuccess() {
+
+            Log.e("Userid", instaObj.getId());
+            Log.e("Name", instaObj.getName());
+            Log.e("UserName", instaObj.getUserName());
+
+        }
+
+        @Override
+        public void onFail(String error) {
+            Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    };
+
+
+
+
 
     public void onFacebookImageClick(View v) {
         (new StartActProcess(getActContext())).startActForResult(FacebookPhotosActivity.class, Utils.ACT_REQ_CODE_FACEBOO_PHOTO_SELECT);
@@ -237,4 +272,22 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             super.onBackPressed();
         }
     }
+
+
+    public void onInstagramClick(View view)
+    {
+
+
+        instaObj = new InstagramApp(this, CLIENT_ID,
+                CLIENT_SECRET, CALLBACK_URL);
+        instaObj.setListener(listener);
+
+
+        instaObj.authorize();
+
+
+    }
+
+
+
 }
