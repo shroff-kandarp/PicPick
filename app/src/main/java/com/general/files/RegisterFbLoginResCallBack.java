@@ -68,7 +68,7 @@ public class RegisterFbLoginResCallBack implements FacebookCallback<LoginResult>
 
                             registerFbUser("", first_name_str, last_name_str, fb_id_str, accessToken);
 
-                            generalFunc.logOUTFrmFB();
+//                            generalFunc.logOUTFrmFB();
                         }
                     }
 

@@ -1,6 +1,7 @@
 package com.picpick;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.adapter.FacebookAlbumRecyclerAdapter;
 import com.adapter.FacebookPhotoRecyclerAdapter;
+import com.general.files.DownloadImage;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.utils.Utils;
@@ -40,12 +42,18 @@ public class FacebookPhotosActivity extends AppCompatActivity {
     GeneralFunctions generalFunctions;
     ProgressBar loading;
 
+    String storedAccessToken = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_photos);
 
         generalFunctions = new GeneralFunctions(getActContext());
+
+        storedAccessToken = generalFunctions.retriveValue(Utils.FACEBOOK_ACCESS_TOKEN_KEY);
+
+        Utils.printLog("storedAccessToken", "::" + storedAccessToken);
         backImgView = (ImageView) findViewById(R.id.backImgView);
         titleTxt = (TextView) findViewById(R.id.titleTxt);
         albumRecyclerView = (RecyclerView) findViewById(R.id.albumRecyclerView);
@@ -80,9 +88,23 @@ public class FacebookPhotosActivity extends AppCompatActivity {
 
                 String item = map.get("PHOTO_PATH");
 
-                Utils.printLog("SelectedPhotoURL",item);
+                Utils.printLog("SelectedPhotoURL", item);
+
+                downloadSelectedPhoto(item);
             }
         });
+    }
+
+    public void downloadSelectedPhoto(String url) {
+
+        DownloadImage downloadImg = new DownloadImage(getActContext(), url);
+        downloadImg.setImageDownloadList(new DownloadImage.ImageDownloadListener() {
+            @Override
+            public void onImageDownload(Bitmap bmp) {
+                Utils.printLog("Image", "Download:Success");
+            }
+        });
+        downloadImg.execute();
     }
 
     public void getFacebookAlbums() {
@@ -92,7 +114,7 @@ public class FacebookPhotosActivity extends AppCompatActivity {
         facebookAlbumsList.clear();
         adapter.notifyDataSetChanged();
 
-        String facebookAlbumUrl = "https://graph.facebook.com/me/albums?access_token=EAACEdEose0cBAEaKV4JKu9HnzVg83iT1WeNTTZBW6kv7fKr1J8eAOfs1rzlLS8I4IWZCmjNZBdWBlRqfBVFPte0RDow6GJYZAzzWjH9YgWpZB18fxhgG966FfUzHoe68MJJNYMNjPcZCGW674AhBpnLVZB36HPsWrk0tV6o4RCJXAZDZD";
+        String facebookAlbumUrl = "https://graph.facebook.com/me/albums?access_token=" + storedAccessToken;
 
         Utils.printLog("UrlBanner", facebookAlbumUrl);
         ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(facebookAlbumUrl, true);
@@ -135,7 +157,7 @@ public class FacebookPhotosActivity extends AppCompatActivity {
         adapter_albumPhoto.notifyDataSetChanged();
 
         String albumId = facebookAlbumsList.get(position).get("ALBUM_ID");
-        String facebookAlbumPhotoUrl = "https://graph.facebook.com/" + albumId + "/photos?access_token=EAACEdEose0cBAEaKV4JKu9HnzVg83iT1WeNTTZBW6kv7fKr1J8eAOfs1rzlLS8I4IWZCmjNZBdWBlRqfBVFPte0RDow6GJYZAzzWjH9YgWpZB18fxhgG966FfUzHoe68MJJNYMNjPcZCGW674AhBpnLVZB36HPsWrk0tV6o4RCJXAZDZD";
+        String facebookAlbumPhotoUrl = "https://graph.facebook.com/" + albumId + "/photos?fields=album,height,icon,id,images,from,name,link,event,created_time,can_tag&access_token="+storedAccessToken;
 
         Utils.printLog("UrlBanner", facebookAlbumPhotoUrl);
         ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(facebookAlbumPhotoUrl, true);

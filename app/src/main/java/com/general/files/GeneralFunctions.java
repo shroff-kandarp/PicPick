@@ -67,6 +67,9 @@ public class GeneralFunctions {
 
         editor.commit();
 
+        storedata(Utils.isFirstLaunchFinished, "Yes");
+        logOUTFrmFB();
+
         restartApp();
     }
 
