@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".InstaSample">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.instagram.instagramapi.widgets.InstagramLoginButton
+            android:id="@+id/instagramLoginButton"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:text="Login Button" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:text="Login" />
+
+        <Button
+            android:id="@+id/userDetail"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="User Detail" />
+
+        <Button
+            android:id="@+id/selfUserDetail"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="Self User Detail" />
+
+        <Button
+            android:id="@+id/mediaForSelfUser"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="mediaForSelfUser" />
+
+        <Button
+            android:id="@+id/mediaForUser"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="mediaForUser" />
+
+        <Button
+            android:id="@+id/userLikedMedia"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="User Liked Media" />
+
+
+        <Button
+            android:id="@+id/getMediaForUser"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="getMediaForUser" />
+
+        <Button
+            android:id="@+id/getUserLikedMedia"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="getUserLikedMedia" />
+
+
+        <Button
+            android:id="@+id/getMedia"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="getMedia" />
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="genericClickListener"
+            android:text="Logout" />
+
+    </LinearLayout>
+</ScrollView>
