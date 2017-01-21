@@ -6,9 +6,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 
-import com.picpick.LauncherActivity;
 import com.facebook.login.LoginManager;
-import com.utils.CommonUtilities;
+import com.picpick.LauncherActivity;
 import com.utils.Utils;
 
 import org.json.JSONArray;
@@ -82,6 +81,10 @@ public class GeneralFunctions {
         return false;
     }
 
+    public String getMemberId() {
+        return retriveValue(Utils.MEMBER_ID_key);
+    }
+
     public String generateDeviceToken() {
 //        if (checkPlayServices() == false) {
 //            return "";
@@ -133,6 +136,15 @@ public class GeneralFunctions {
         generateAlert.setContentMessage(title, message);
         generateAlert.setPositiveBtn("Ok");
         generateAlert.showAlertBox();
+    }
+
+    public boolean isDataAvail(String key, String responseString) {
+        String actionValue = getJsonValue(key, responseString);
+
+        if (actionValue != null && !actionValue.equals("") && actionValue.trim().equals("1")) {
+            return true;
+        }
+        return false;
     }
 
     public String getJsonValue(String key, String response) {
@@ -207,11 +219,6 @@ public class GeneralFunctions {
 
     public void logOUTFrmFB() {
         LoginManager.getInstance().logOut();
-    }
-
-    public void storeUserData(String memberId) {
-        storedata(CommonUtilities.iMemberId_KEY, memberId);
-        storedata(CommonUtilities.isUserLogIn, "1");
     }
 
 }

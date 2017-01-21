@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adapter.DrawerAdapter;
+import com.facebook.FacebookSdk;
 import com.general.files.GeneralFunctions;
 import com.general.files.StartActProcess;
 import com.squareup.picasso.Picasso;
@@ -58,6 +59,9 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getActContext());
+        FacebookSdk.setApplicationId(Utils.FACEBOOK_APPID);
+        FacebookSdk.setWebDialogTheme(R.style.FBDialogtheme);
         setContentView(R.layout.activity_dashboard);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
