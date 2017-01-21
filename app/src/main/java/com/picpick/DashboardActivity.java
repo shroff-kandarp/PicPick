@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -239,7 +240,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "About Us", "" + Utils.MENU_ABOUT_US});
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Gallery", "" + Utils.MENU_VIDEOS});
-        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "My Account", "" + Utils.MENU_BLOG});
+        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "My Address", "" + Utils.MENU_ADDRESS});
 
         if (generalFunc.isUserLoggedIn()) {
             list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Sign Out", "" + Utils.MENU_SIGN_OUT});
@@ -254,6 +255,13 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         switch (itemId) {
             case Utils.MENU_SIGN_OUT:
                 generalFunc.signOut();
+
+                break;
+
+            case Utils.MENU_ADDRESS:
+
+                Intent i = new Intent(DashboardActivity.this,AddressActivity.class);
+                startActivity(i);
 
                 break;
 
@@ -281,18 +289,36 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     {
 
 
-        Intent i = new Intent(DashboardActivity.this, InstaSample.class);
-        startActivity(i);
+//        Intent i = new Intent(DashboardActivity.this, InstaSample.class);
+//        startActivity(i);
 //
-//        instaObj = new InstagramApp(this, CLIENT_ID,
-//                CLIENT_SECRET, CALLBACK_URL);
-//        instaObj.setListener(listener);
-//
-//
-//        instaObj.authorize();
+        instaObj = new InstagramApp(this, CLIENT_ID,
+                CLIENT_SECRET, CALLBACK_URL);
+        instaObj.setListener(listener);
+
+
+        instaObj.authorize();
 
 
     }
+
+    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
+
+        @Override
+        public void onSuccess() {
+
+            Log.e("Userid", instaObj.getId());
+            Log.e("Name", instaObj.getName());
+            Log.e("UserName", instaObj.getUserName());
+
+        }
+
+        @Override
+        public void onFail(String error) {
+            Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    };
 
 
 
