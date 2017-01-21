@@ -236,7 +236,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "About Us", "" + Utils.MENU_ABOUT_US});
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Gallery", "" + Utils.MENU_VIDEOS});
-        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "My Account", "" + Utils.MENU_BLOG});
+        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "My Address", "" + Utils.MENU_ADDRESS});
 
         if (generalFunc.isUserLoggedIn()) {
             list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Sign Out", "" + Utils.MENU_SIGN_OUT});
@@ -251,6 +251,13 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         switch (itemId) {
             case Utils.MENU_SIGN_OUT:
                 generalFunc.signOut();
+
+                break;
+
+            case Utils.MENU_ADDRESS:
+
+                Intent i = new Intent(DashboardActivity.this,AddressActivity.class);
+                startActivity(i);
 
                 break;
 
