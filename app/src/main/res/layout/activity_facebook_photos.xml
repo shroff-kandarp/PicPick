@@ -21,6 +21,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="5dp"
             android:orientation="horizontal" />
+
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/albumPhotoRecyclerView"
             android:layout_width="match_parent"

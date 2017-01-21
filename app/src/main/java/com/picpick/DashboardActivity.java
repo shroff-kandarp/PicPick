@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -277,18 +278,36 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     {
 
 
-        Intent i = new Intent(DashboardActivity.this, InstaSample.class);
-        startActivity(i);
+//        Intent i = new Intent(DashboardActivity.this, InstaSample.class);
+//        startActivity(i);
 //
-//        instaObj = new InstagramApp(this, CLIENT_ID,
-//                CLIENT_SECRET, CALLBACK_URL);
-//        instaObj.setListener(listener);
-//
-//
-//        instaObj.authorize();
+        instaObj = new InstagramApp(this, CLIENT_ID,
+                CLIENT_SECRET, CALLBACK_URL);
+        instaObj.setListener(listener);
+
+
+        instaObj.authorize();
 
 
     }
+
+    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
+
+        @Override
+        public void onSuccess() {
+
+            Log.e("Userid", instaObj.getId());
+            Log.e("Name", instaObj.getName());
+            Log.e("UserName", instaObj.getUserName());
+
+        }
+
+        @Override
+        public void onFail(String error) {
+            Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    };
 
 
 
