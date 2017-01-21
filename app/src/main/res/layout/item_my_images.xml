@@ -44,7 +44,7 @@
                 android:background="@drawable/redgoogle_rounded_button"
                 android:padding="10dp"
                 android:layout_margin="5dp"
-                android:layout_gravity="right||center"
+                android:layout_gravity="center"
                 android:textColor="@color/white"
                 android:text="Add to cart"/>
 
