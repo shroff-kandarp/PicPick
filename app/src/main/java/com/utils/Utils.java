@@ -30,10 +30,14 @@ public class Utils {
     public static String FACEBOOK_ACCESS_TOKEN_KEY = "FB_ACCESS_TOKEN";
     public static String FACEBOOK_APPID = "625022797680838";
 
+    public static String INSTA_USER_ID_KEY = "INSTA_USER_ID";
+    public static String INSTA_USER_ACCESS_TOKEN_KEY = "INSTA_USER_ACCESS_TOKEN";
+
     public static String storedImageFolderName = "TempImages";
     public static String storedImageName = "temp.jpg";
 
     public static int ACT_REQ_CODE_FACEBOO_PHOTO_SELECT = 101;
+    public static int ACT_REQ_CODE_INSTA_PHOTO_SELECT = 102;
 
     public static final int MENU_ABOUT_US = 0;
     public static final int MENU_ADDRESS = 1;

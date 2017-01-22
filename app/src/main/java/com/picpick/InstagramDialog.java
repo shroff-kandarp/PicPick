@@ -38,7 +38,7 @@ public class InstagramDialog extends Dialog {
     static final int MARGIN = 8;
     static final int PADDING = 2;
 
-    static final String TAG = "Instagram-Android";
+    static final String TAG = "Instagram";
 
     public InstagramDialog(Context context, String authUrl, String redirectUri,InstagramDialogListener listener) {
         super(context);
@@ -203,8 +203,8 @@ public class InstagramDialog extends Dialog {
     }
 
     public interface InstagramDialogListener {
-        public abstract void onSuccess(String code);
-        public abstract void onCancel();
-        public abstract void onError(String error);
+        void onSuccess(String code);
+        void onCancel();
+        void onError(String error);
     }
 }

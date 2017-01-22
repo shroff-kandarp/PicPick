@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.adapter.DrawerAdapter;
 import com.facebook.FacebookSdk;
+import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.general.files.StartActProcess;
 import com.general.files.StartCropper;
@@ -33,6 +34,7 @@ import com.view.CreateRoundedView;
 import com.view.SelectableRoundedImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DashboardActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -244,26 +246,73 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 //
 //        instaObj.authorize();
 
-        InstagramDialog instaDialog = new InstagramDialog(getActContext(), CommonUtilities.INSTA_AUTH_URL,
-                CommonUtilities.INSTA_CALLBACK_URL, new InstagramDialog.InstagramDialogListener() {
+        String insta_access_token = generalFunc.retriveValue(Utils.INSTA_USER_ACCESS_TOKEN_KEY);
+        String insta_user_id = generalFunc.retriveValue(Utils.INSTA_USER_ID_KEY);
+        if (!insta_access_token.equals("") && !insta_user_id.equals("")) {
+            (new StartActProcess(getActContext())).startActForResult(InstaPhotosActivity.class, Utils.ACT_REQ_CODE_INSTA_PHOTO_SELECT);
+
+        } else {
+            InstagramDialog instaDialog = new InstagramDialog(getActContext(), CommonUtilities.INSTA_AUTH_URL,
+                    CommonUtilities.INSTA_CALLBACK_URL, new InstagramDialog.InstagramDialogListener() {
+                @Override
+                public void onSuccess(String code) {
+                    Utils.printLog("CODE:", "::" + code);
+                    getUserAccessToken(code);
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+
+            instaDialog.show();
+        }
+
+
+    }
+
+    public void getUserAccessToken(String auth_code) {
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("client_id", CommonUtilities.INSTA_CLIENT_ID);
+        parameters.put("client_secret", CommonUtilities.INSTA_CLIENT_SECRET);
+        parameters.put("grant_type", "authorization_code");
+        parameters.put("code", auth_code);
+        parameters.put("redirect_uri", CommonUtilities.INSTA_CALLBACK_URL);
+
+        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters, CommonUtilities.INSTA_TOKEN_URL);
+        exeWebServer.setLoaderConfig(getActContext(), true, generalFunc);
+        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
             @Override
-            public void onSuccess(String code) {
-                Utils.printLog("CODE:","::"+code);
-            }
+            public void setResponse(String responseString) {
 
-            @Override
-            public void onCancel() {
+                Utils.printLog("Response", "::" + responseString);
 
-            }
+                if (responseString != null && !responseString.equals("")) {
 
-            @Override
-            public void onError(String error) {
 
+                    String access_token = generalFunc.getJsonValue("access_token", responseString);
+                    String id = generalFunc.getJsonValue("id", generalFunc.getJsonValue("user", responseString));
+
+                    if (!access_token.trim().equals("") && !id.trim().equals("")) {
+                        generalFunc.storedata(Utils.INSTA_USER_ID_KEY, id);
+                        generalFunc.storedata(Utils.INSTA_USER_ACCESS_TOKEN_KEY, access_token);
+
+                        (new StartActProcess(getActContext())).startActForResult(InstaPhotosActivity.class, Utils.ACT_REQ_CODE_INSTA_PHOTO_SELECT);
+
+                    }
+
+                } else {
+                    generalFunc.showGeneralMessage("Error", "Please try again later.");
+                }
             }
         });
-
-        instaDialog.show();
-
+        exeWebServer.execute();
     }
 
 //    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {

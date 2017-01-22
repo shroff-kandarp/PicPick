@@ -157,6 +157,7 @@ public class FacebookPhotosActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 } else {
+                    generalFunctions.showGeneralMessage("","Please try again later");
                 }
             }
         });

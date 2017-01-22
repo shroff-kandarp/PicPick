@@ -32,8 +32,15 @@ public class ExecuteWebServerUrl extends AsyncTask<String, String, String> {
     boolean isGenerateDeviceToken = false;
     String key_DeviceToken_param;
 
+    String requestURL = CommonUtilities.SERVER_URL_WEBSERVICE;
+
     public ExecuteWebServerUrl(HashMap<String, String> parameters) {
         this.parameters = parameters;
+    }
+
+    public ExecuteWebServerUrl(HashMap<String, String> parameters,String requestURL) {
+        this.parameters = parameters;
+        this.requestURL = requestURL;
     }
 
     public ExecuteWebServerUrl(String directUrl, boolean directUrl_value) {
@@ -77,7 +84,7 @@ public class ExecuteWebServerUrl extends AsyncTask<String, String, String> {
             }
         }
         if (directUrl_value == false) {
-            responseString = OutputStreamReader.performPostCall(CommonUtilities.SERVER_URL_WEBSERVICE, parameters);
+            responseString = OutputStreamReader.performPostCall(requestURL, parameters);
         } else {
             responseString = new ExecuteResponse().getResponse(directUrl);
         }
