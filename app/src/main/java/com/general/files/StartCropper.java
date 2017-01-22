@@ -11,9 +11,11 @@ import android.os.Build;
 import android.provider.MediaStore;
 
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Shroff on 22-Jan-17.
@@ -67,6 +69,13 @@ public class StartCropper {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), resultUri);
 
                     File file = generalFunc.saveImage(bitmap);
+
+                    ArrayList<String[]> paramsList = new ArrayList<>();
+                    paramsList.add(Utils.generateImageParams("iMemberId", generalFunc.getMemberId()));
+
+                    paramsList.add(Utils.generateImageParams("type", "uploadImage"));
+
+                    new UploadImage(mContext, file.getAbsolutePath(), Utils.storedImageName, paramsList).execute();
 
                 } catch (IOException e) {
                     e.printStackTrace();

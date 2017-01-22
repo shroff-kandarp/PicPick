@@ -8,6 +8,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -79,10 +80,10 @@ public class ExecuteResponse {
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(CommonUtilities.SERVER_URL_WEBSERVICE);
-
+                httpPost.addHeader("header-name" , "header-value");
                 InputStreamBody inputStreamBody = new InputStreamBody(new ByteArrayInputStream(data), fileName);
                 MultipartEntity multipartEntity = new MultipartEntity();
-                multipartEntity.addPart(imageParamKey, inputStreamBody);
+                multipartEntity.addPart(imageParamKey, new ByteArrayBody(data, "image/jpeg", fileName));
 
                 for (int i = 0; i < params.size(); i++) {
                     String[] paramsArr = params.get(i);

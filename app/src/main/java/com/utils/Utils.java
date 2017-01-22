@@ -106,4 +106,12 @@ public class Utils {
         editBox.setError(error);
         return false;
     }
+
+    public static String[] generateImageParams(String key, String content) {
+        String[] tempArr = new String[2];
+        tempArr[0] = key;
+        tempArr[1] = content;
+
+        return tempArr;
+    }
 }
