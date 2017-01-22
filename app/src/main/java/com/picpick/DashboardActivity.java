@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,16 +22,19 @@ import android.widget.Toast;
 
 import com.adapter.DrawerAdapter;
 import com.facebook.FacebookSdk;
+import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.general.files.StartActProcess;
 import com.general.files.StartCropper;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.utils.CommonUtilities;
 import com.utils.Utils;
 import com.view.CreateRoundedView;
 import com.view.SelectableRoundedImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DashboardActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -46,8 +48,6 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     TextView titleTxt;
     GeneralFunctions generalFunc;
 
-
-    private InstagramApp instaObj;
     public static final String CLIENT_ID = "c78d0e33cbcb440db85ff8f77bdcde00";
     public static final String CLIENT_SECRET = "ee2c99883f2f4e378f4ab413dbad66ce ";
     public static final String CALLBACK_URL = "https://www.instagram.com/";
@@ -254,33 +254,99 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 //        Intent i = new Intent(DashboardActivity.this, InstaSample.class);
 //        startActivity(i);
 //
-        instaObj = new InstagramApp(this, CLIENT_ID,
-                CLIENT_SECRET, CALLBACK_URL);
-        instaObj.setListener(listener);
+//        instaObj = new InstagramApp(this, CLIENT_ID,
+//                CLIENT_SECRET, CALLBACK_URL);
+//        instaObj.setListener(listener);
+//
+//
+//        instaObj.authorize();
 
+        String insta_access_token = generalFunc.retriveValue(Utils.INSTA_USER_ACCESS_TOKEN_KEY);
+        String insta_user_id = generalFunc.retriveValue(Utils.INSTA_USER_ID_KEY);
+        if (!insta_access_token.equals("") && !insta_user_id.equals("")) {
+            (new StartActProcess(getActContext())).startActForResult(InstaPhotosActivity.class, Utils.ACT_REQ_CODE_INSTA_PHOTO_SELECT);
 
-        instaObj.authorize();
+        } else {
+            InstagramDialog instaDialog = new InstagramDialog(getActContext(), CommonUtilities.INSTA_AUTH_URL,
+                    CommonUtilities.INSTA_CALLBACK_URL, new InstagramDialog.InstagramDialogListener() {
+                @Override
+                public void onSuccess(String code) {
+                    Utils.printLog("CODE:", "::" + code);
+                    getUserAccessToken(code);
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+
+            instaDialog.show();
+        }
 
 
     }
 
-    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
+    public void getUserAccessToken(String auth_code) {
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("client_id", CommonUtilities.INSTA_CLIENT_ID);
+        parameters.put("client_secret", CommonUtilities.INSTA_CLIENT_SECRET);
+        parameters.put("grant_type", "authorization_code");
+        parameters.put("code", auth_code);
+        parameters.put("redirect_uri", CommonUtilities.INSTA_CALLBACK_URL);
 
-        @Override
-        public void onSuccess() {
+        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters, CommonUtilities.INSTA_TOKEN_URL);
+        exeWebServer.setLoaderConfig(getActContext(), true, generalFunc);
+        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
+            @Override
+            public void setResponse(String responseString) {
 
-            Log.e("Userid", instaObj.getId());
-            Log.e("Name", instaObj.getName());
-            Log.e("UserName", instaObj.getUserName());
+                Utils.printLog("Response", "::" + responseString);
 
-        }
+                if (responseString != null && !responseString.equals("")) {
 
-        @Override
-        public void onFail(String error) {
-            Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT)
-                    .show();
-        }
-    };
+
+                    String access_token = generalFunc.getJsonValue("access_token", responseString);
+                    String id = generalFunc.getJsonValue("id", generalFunc.getJsonValue("user", responseString));
+
+                    if (!access_token.trim().equals("") && !id.trim().equals("")) {
+                        generalFunc.storedata(Utils.INSTA_USER_ID_KEY, id);
+                        generalFunc.storedata(Utils.INSTA_USER_ACCESS_TOKEN_KEY, access_token);
+
+                        (new StartActProcess(getActContext())).startActForResult(InstaPhotosActivity.class, Utils.ACT_REQ_CODE_INSTA_PHOTO_SELECT);
+
+                    }
+
+                } else {
+                    generalFunc.showGeneralMessage("Error", "Please try again later.");
+                }
+            }
+        });
+        exeWebServer.execute();
+    }
+
+//    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
+//
+//        @Override
+//        public void onSuccess() {
+//
+//            Log.e("Userid", instaObj.getId());
+//            Log.e("Name", instaObj.getName());
+//            Log.e("UserName", instaObj.getUserName());
+//
+//        }
+//
+//        @Override
+//        public void onFail(String error) {
+//            Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT)
+//                    .show();
+//        }
+//    };
 
 
     @Override
