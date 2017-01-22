@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edt_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/appThemeColor_transparent"
+            android:foregroundTint="@color/appThemeColor"
+            android:hint="Full Name"/>
+
+
+
+
+
+        <EditText
+            android:id="@+id/edt_mob"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:inputType="numberDecimal"
+            android:backgroundTint="@color/appThemeColor_transparent"
+            android:foregroundTint="@color/appThemeColor"
+            android:hint="Mobile No"/>
+
+
+        <EditText
+            android:id="@+id/edt_address"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:background="@drawable/blue_rectangle_bordr"
+            android:hint="Address"/>
+
+        <EditText
+            android:id="@+id/edt_city"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/appThemeColor_transparent"
+            android:foregroundTint="@color/appThemeColor"
+
+            android:hint="City"/>
+
+        <EditText
+            android:id="@+id/edt_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/appThemeColor_transparent"
+            android:foregroundTint="@color/appThemeColor"
+
+            android:hint="State"/>
+
+        <EditText
+            android:id="@+id/edt_country"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/appThemeColor_transparent"
+            android:foregroundTint="@color/appThemeColor"
+
+            android:hint="Country"/>
+
+        <EditText
+            android:id="@+id/edt_pincode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/appThemeColor_transparent"
+            android:foregroundTint="@color/appThemeColor"
+            android:inputType="numberDecimal"
+            android:hint="Pin Code"/>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</ScrollView>

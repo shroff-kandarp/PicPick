@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_fullname"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:hint="Full Name"/>
+
+
+
+
+        <TextView
+            android:id="@+id/tv_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_margin="5dp"
+            android:hint="Mobile No"/>
+
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+
+            android:hint="Address"/>
+
+
+        <TextView
+            android:id="@+id/tv_city"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:hint="City"/>
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:hint="State"/>
+        <TextView
+            android:id="@+id/tv_country"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:hint="Country"/>
+        <TextView
+            android:id="@+id/tv_pincode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:hint="EPincode"/>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_update_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_margin="5dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:background="@drawable/redgoogle_rounded_button"
+                android:text="Update"/>
+
+            <Button
+                android:id="@+id/btn_delete_address"
+                android:layout_width="wrap_content"
+                android:padding="10dp"
+                android:layout_margin="5dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:background="@drawable/red_rounded_button"
+                android:layout_height="wrap_content"
+                android:text="Delete"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+</android.support.v7.widget.CardView>
+
+
+</LinearLayout>
