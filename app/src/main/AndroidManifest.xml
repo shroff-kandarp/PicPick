@@ -54,7 +54,7 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".AppIntroActivity" />
-        <activity android:name=".InstaSample" />
+
         <activity android:name=".AddressActivity" />
         <activity android:name=".MyImagesActivity" />
         <activity android:name=".MyCartActivity" />

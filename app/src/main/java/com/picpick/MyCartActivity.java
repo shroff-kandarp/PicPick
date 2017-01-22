@@ -22,7 +22,6 @@ import com.general.files.StartActProcess;
 import com.utils.Utils;
 
 import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 

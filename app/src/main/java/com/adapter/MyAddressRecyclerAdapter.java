@@ -1,20 +1,16 @@
 package com.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.picpick.R;
-import com.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,75 +82,21 @@ public class MyAddressRecyclerAdapter extends RecyclerView.Adapter<MyAddressRecy
             viewHolder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
-                    alert = new AlertDialog.Builder(mContext);
-
-                    final View dialogView = LayoutInflater.from(mContext).inflate(R.layout.custom_dialog, null);
-                    alert.setView(dialogView);
-
-                    final EditText edittext = new EditText(mContext);
-                    //alert.setMessage("Caption message");
-
-                    alert.setTitle("Delete Address?");
-
-                    alert.setView(edittext);
-
-                    //final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
-
-                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-
-
-                            HashMap<String, String> parameters = new HashMap<>();
-
-                            parameters.put("type", "deleteUserAddress");
-                            parameters.put("iAddressId", iAddressId);
-
-
-                            ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
-                            exeWebServer.setLoaderConfig(mContext, true, generalFunctions);
-                            exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
-                                @Override
-                                public void setResponse(String responseString) {
-
-                                    Utils.printLog("Response", "::" + responseString);
-
-                                    if (responseString != null && !responseString.equals("")) {
-
-                                        if (generalFunctions.isDataAvail("Action", responseString)) {
-
-
-                                            list_item.remove(item); //Actually change your list of items here
-                                            adapter.notifyDataSetChanged();
-
-
-                                        } else {
-                                            generalFunctions.showGeneralMessage("Error", generalFunctions.getJsonValue("message", responseString));
-                                        }
-                                    } else {
-                                        generalFunctions.showGeneralMessage("Error", "Please try again later.");
-                                    }
-                                }
-                            });
-                            exeWebServer.execute();
-
-
-                        }
-                    });
-
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-
-
-                        }
-                    });
-
-                    alert.show();
-
-
+                    if (onItemClickList != null) {
+                        onItemClickList.onItemClick(position, 1);
+                    }
                 }
             });
+
+            viewHolder.update.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickList != null) {
+                        onItemClickList.onItemClick(position, 2);
+                    }
+                }
+            });
+
 
 
         }

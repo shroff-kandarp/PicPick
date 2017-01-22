@@ -38,7 +38,7 @@ public class AppIntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_intro);
 
-        /////////
+
         generalFunc = new GeneralFunctions(getActContext());
         circlePageIndictor = (CirclePageIndicator) findViewById(R.id.circlePageIndictor);
         skipTxt = (TextView) findViewById(R.id.skipTxt);
@@ -46,11 +46,11 @@ public class AppIntroActivity extends AppCompatActivity {
         arrowImgView = (ImageView) findViewById(R.id.arrowImgView);
 
         listAppIntroFragment = new ArrayList<AppIntroFragment>();
-        listAppIntroFragment.add(createAppIntroFragment("Login with Facebook", R.drawable.how1));
-        listAppIntroFragment.add(createAppIntroFragment("Upload pictures for edits", R.drawable.how2));
-        listAppIntroFragment.add(createAppIntroFragment("caption it acording to your requirement", R.drawable.how3));
-        listAppIntroFragment.add(createAppIntroFragment("Place order", R.drawable.how4));
-        listAppIntroFragment.add(createAppIntroFragment("Bingo!! Get your pictures within a day.", R.drawable.how5));
+        listAppIntroFragment.add(createAppIntroFragment("Login with Facebook", R.mipmap.ic_user));
+        listAppIntroFragment.add(createAppIntroFragment("Upload pictures for edits",R.mipmap.ic_photo));
+        listAppIntroFragment.add(createAppIntroFragment("caption it acording to your requirement", R.mipmap.ic_caption));
+        listAppIntroFragment.add(createAppIntroFragment("Place order", R.mipmap.ic_order));
+        listAppIntroFragment.add(createAppIntroFragment("Bingo!! Get your pictures frame within a day.", R.mipmap.ic_delivery));
 
         appintroAdapter = new AppIntroAdapter(getSupportFragmentManager(), listAppIntroFragment);
 

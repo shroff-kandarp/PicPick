@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.adapter.MyAddressRecyclerAdapter;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
+import com.general.files.GenerateAlertBox;
 import com.general.files.StartActProcess;
 import com.utils.Utils;
 import com.view.editBox.MaterialEditText;
@@ -276,15 +277,81 @@ public class AddressActivity extends AppCompatActivity implements MyAddressRecyc
 
     }
 
+
+
+
+    public void deleteItem(int position) {
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("type", "deleteUserAddress");
+        parameters.put("iAddressId", list_address_items.get(position).get("iAddressId"));
+
+        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
+        exeWebServer.setLoaderConfig(getActContext(), true, generalFunctions);
+        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
+            @Override
+            public void setResponse(String responseString) {
+
+                Utils.printLog("Response", "::" + responseString);
+
+                if (responseString != null && !responseString.equals("")) {
+
+                    if (generalFunctions.isDataAvail("Action", responseString)) {
+                        getAddressList();
+                    } else {
+                        generalFunctions.showGeneralMessage("Error", generalFunctions.getJsonValue("message", responseString));
+                    }
+                } else {
+                    generalFunctions.showGeneralMessage("Error", "Please try again later.");
+                }
+            }
+        });
+        exeWebServer.execute();
+    }
+
+
+
+
+    public void updateItem(int position) {
+
+
+
+         }
+
     @Override
-    public void onItemClick(int position, int btn_id) {
+    public void onItemClick(final int position1, int btn_id) {
         switch (btn_id) {
             case 0:
                 Bundle bn = new Bundle();
-                bn.putString("iAddressId", list_address_items.get(position).get("iAddressId"));
+                bn.putString("iAddressId", list_address_items.get(position1).get("iAddressId"));
                 (new StartActProcess(getActContext())).setOkResult(bn);
                 backImgView.performClick();
                 break;
+
+
+            case 1:
+                final GenerateAlertBox generateAlert = new GenerateAlertBox(getActContext());
+                generateAlert.setCancelable(false);
+                generateAlert.setBtnClickList(new GenerateAlertBox.HandleAlertBtnClick() {
+                    @Override
+                    public void handleBtnClick(int btn_id) {
+                        generateAlert.closeAlertBox();
+
+                        if (btn_id == 1) {
+                            deleteItem(position1);
+                        }
+                    }
+                });
+                generateAlert.setContentMessage("", "Are you sure, you want to delete?");
+                generateAlert.setPositiveBtn("Ok");
+                generateAlert.setNegativeBtn("Cancel");
+
+                generateAlert.showAlertBox();
+
+            case 2:
+                updateItem(position1);
+
+
+
         }
     }
 
