@@ -54,10 +54,10 @@ public class MyAddressRecyclerAdapter extends RecyclerView.Adapter<MyAddressRecy
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
         if (viewHolder instanceof MyAddressRecyclerAdapter.ViewHolder) {
-             item = list_item.get(position);
+            item = list_item.get(position);
 
             String vName = item.get("vName");
-             iAddressId = item.get("iAddressId");
+            iAddressId = item.get("iAddressId");
             String vMobile = item.get("vMobile");
             String vAddress = item.get("vAddress");
             String vCity = item.get("vCity");
@@ -74,6 +74,14 @@ public class MyAddressRecyclerAdapter extends RecyclerView.Adapter<MyAddressRecy
             viewHolder.tv_state.setText(vState);
             viewHolder.tv_pincode.setText(vPinCode);
 
+            viewHolder.containerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onItemClickList != null) {
+                        onItemClickList.onItemClick(position, 0);
+                    }
+                }
+            });
 
             viewHolder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,47 +106,38 @@ public class MyAddressRecyclerAdapter extends RecyclerView.Adapter<MyAddressRecy
                         public void onClick(DialogInterface dialog, int whichButton) {
 
 
+                            HashMap<String, String> parameters = new HashMap<>();
 
-                                HashMap<String, String> parameters = new HashMap<>();
-
-                                parameters.put("type", "deleteUserAddress");
-                                parameters.put("iAddressId",iAddressId);
-
+                            parameters.put("type", "deleteUserAddress");
+                            parameters.put("iAddressId", iAddressId);
 
 
-                                ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
-                                exeWebServer.setLoaderConfig(mContext, true, generalFunctions);
-                                exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
-                                    @Override
-                                    public void setResponse(String responseString) {
+                            ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
+                            exeWebServer.setLoaderConfig(mContext, true, generalFunctions);
+                            exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
+                                @Override
+                                public void setResponse(String responseString) {
 
-                                        Utils.printLog("Response", "::" + responseString);
+                                    Utils.printLog("Response", "::" + responseString);
 
-                                        if (responseString != null && !responseString.equals("")) {
+                                    if (responseString != null && !responseString.equals("")) {
 
-                                            if (generalFunctions.isDataAvail("Action", responseString)) {
-
-
-                                                list_item.remove(item); //Actually change your list of items here
-                                                adapter.notifyDataSetChanged();
+                                        if (generalFunctions.isDataAvail("Action", responseString)) {
 
 
-                                            } else {
-                                                generalFunctions.showGeneralMessage("Error", generalFunctions.getJsonValue("message", responseString));
-                                            }
+                                            list_item.remove(item); //Actually change your list of items here
+                                            adapter.notifyDataSetChanged();
+
+
                                         } else {
-                                            generalFunctions.showGeneralMessage("Error", "Please try again later.");
+                                            generalFunctions.showGeneralMessage("Error", generalFunctions.getJsonValue("message", responseString));
                                         }
+                                    } else {
+                                        generalFunctions.showGeneralMessage("Error", "Please try again later.");
                                     }
-                                });
-                                exeWebServer.execute();
-
-
-
-
-
-
-
+                                }
+                            });
+                            exeWebServer.execute();
 
 
                         }
@@ -154,10 +153,6 @@ public class MyAddressRecyclerAdapter extends RecyclerView.Adapter<MyAddressRecy
                     alert.show();
 
 
-
-
-
-
                 }
             });
 
@@ -169,14 +164,15 @@ public class MyAddressRecyclerAdapter extends RecyclerView.Adapter<MyAddressRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        public Button delete,update;
-        public TextView tv_name,tv_mobile,tv_address,tv_city,tv_state,tv_country,tv_pincode;
+        View containerView;
+        public Button delete, update;
+        public TextView tv_name, tv_mobile, tv_address, tv_city, tv_state, tv_country, tv_pincode;
 
 
         public ViewHolder(View view) {
             super(view);
 
-
+            containerView = view.findViewById(R.id.containerView);
             delete = (Button) view.findViewById(R.id.btn_delete_address);
             update = (Button) view.findViewById(R.id.btn_update_address);
 
@@ -197,17 +193,11 @@ public class MyAddressRecyclerAdapter extends RecyclerView.Adapter<MyAddressRecy
     }
 
     public interface OnItemClickList {
-        void onItemClick(int position);
+        void onItemClick(int position, int btn_id);
     }
 
     public void setOnItemClickList(OnItemClickList onItemClickList) {
         this.onItemClickList = onItemClickList;
-    }
-
-    public void clickOnItem(int position) {
-        if (onItemClickList != null) {
-            onItemClickList.onItemClick(position);
-        }
     }
 
 }

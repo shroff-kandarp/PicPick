@@ -18,6 +18,7 @@ import com.adapter.MyCartRecyclerAdapter;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.general.files.GenerateAlertBox;
+import com.general.files.StartActProcess;
 import com.utils.Utils;
 
 import org.json.JSONArray;
@@ -214,26 +215,29 @@ public class MyCartActivity extends AppCompatActivity implements MyCartRecyclerA
     }
 
     public void selectAddress() {
-//        (new StartActProcess(getActContext())).startActForResult(AddressActivity.class, Utils.ACT_REQ_CODE_ADDRESS_SELECT);
-        placeOrder("0");
+        (new StartActProcess(getActContext())).startActForResult(AddressActivity.class, Utils.ACT_REQ_CODE_ADDRESS_SELECT);
+//        placeOrder("0");
     }
 
     public String getCartIds() {
 
         String cartIds = "";
         for (int i = 0; i < list_cart_items.size(); i++) {
-            cartIds = (i == 0) ? list_cart_items.get(i).get("CartId") : ("," + list_cart_items.get(i).get("CartId"));
+
+            cartIds = (i == 0) ? list_cart_items.get(i).get("CartId") : (cartIds +"," + list_cart_items.get(i).get("CartId"));
         }
         return cartIds;
     }
 
     public void placeOrder(String iAddressId) {
+        Utils.printLog("getCartIds", "::" + getCartIds());
         HashMap<String, String> parameters = new HashMap<>();
         parameters.put("type", "createOrder");
         parameters.put("iMemberId", generalFunctions.getMemberId());
         parameters.put("iCartId", getCartIds());
         parameters.put("iAddressId", iAddressId);
 
+        Utils.printLog("parameters", "::" + parameters.toString());
         ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
         exeWebServer.setLoaderConfig(getActContext(), true, generalFunctions);
         exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
@@ -245,7 +249,22 @@ public class MyCartActivity extends AppCompatActivity implements MyCartRecyclerA
                 if (responseString != null && !responseString.equals("")) {
 
                     if (generalFunctions.isDataAvail("Action", responseString)) {
-                        getMyCart();
+//                        getMyCart();
+
+                        GenerateAlertBox alertBox = new GenerateAlertBox(getActContext());
+                        alertBox.setContentMessage("", generalFunctions.getJsonValue("message", responseString));
+                        alertBox.setCancelable(false);
+                        alertBox.setPositiveBtn("Ok");
+                        alertBox.setBtnClickList(new GenerateAlertBox.HandleAlertBtnClick() {
+                            @Override
+                            public void handleBtnClick(int btn_id) {
+
+                                if (btn_id == 1) {
+                                    backImgView.performClick();
+                                }
+                            }
+                        });
+                        alertBox.showAlertBox();
                     } else {
                         generalFunctions.showGeneralMessage("Error", generalFunctions.getJsonValue("message", responseString));
                     }
@@ -266,6 +285,7 @@ public class MyCartActivity extends AppCompatActivity implements MyCartRecyclerA
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Utils.ACT_REQ_CODE_ADDRESS_SELECT && resultCode == RESULT_OK && data != null) {
+            Utils.printLog("iAddressId", data.getStringExtra("iAddressId"));
             placeOrder(data.getStringExtra("iAddressId"));
         }
     }

@@ -1,13 +1,16 @@
 package com.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.EditText;
 
 import com.view.editBox.MaterialEditText;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +18,8 @@ import java.util.regex.Pattern;
  * Created by Shroff on 7/3/2016.
  */
 public class Utils {
+
+    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
     public static int minPasswordLength = 2;
     public static String isFirstLaunchFinished = "isFirstLaunchFinished";
@@ -118,5 +123,30 @@ public class Utils {
         tempArr[1] = content;
 
         return tempArr;
+    }
+
+    public static int generateViewId() {
+        /**
+         * Generate a value suitable for use in {@link #setId(int)}.
+         * This value will not collide with ID values generated at build time by aapt for R.id.
+         *
+         * @return a generated ID value
+         */
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            for (; ; ) {
+                final int result = sNextGeneratedId.get();
+                // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
+                int newValue = result + 1;
+                if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
+                if (sNextGeneratedId.compareAndSet(result, newValue)) {
+                    return result;
+                }
+            }
+
+        } else {
+            return View.generateViewId();
+        }
+
     }
 }

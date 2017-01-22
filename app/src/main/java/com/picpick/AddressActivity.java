@@ -10,18 +10,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.adapter.MyAddressRecyclerAdapter;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
+import com.general.files.StartActProcess;
 import com.utils.Utils;
+import com.view.editBox.MaterialEditText;
 
 import org.json.JSONArray;
 
@@ -32,179 +34,146 @@ import java.util.HashMap;
  * Created by Ravi on 22-01-2017.
  */
 
-public class AddressActivity extends AppCompatActivity {
+public class AddressActivity extends AppCompatActivity implements MyAddressRecyclerAdapter.OnItemClickList {
 
-    AlertDialog.Builder alert;
-
-    private String memberId;
+    TextView titleTxt;
     GeneralFunctions generalFunctions;
-    ArrayList<HashMap<String, String>> list_images;
+    ArrayList<HashMap<String, String>> list_address_items;
     MyAddressRecyclerAdapter myAddressRecyclerAdapter;
     RecyclerView myAddresRecyclerView;
-    ImageView backImgView,cartImage;
-    Button btn_add;
+    ImageView backImgView, cartImage;
+    Button btn_add_address;
 
+    android.support.v7.app.AlertDialog alertDialog;
+
+    ProgressBar loading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_address);
-
-
-        btn_add = (Button) findViewById(R.id.btn_add_address);
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                alert = new AlertDialog.Builder(getActContext());
-
-                final View dialogView = LayoutInflater.from(getActContext()).inflate(R.layout.custom_address_dialog, null);
-                alert.setView(dialogView);
-
-                //final EditText edittext = new EditText(getActContext());
-                //alert.setMessage("Caption message");
-
-                alert.setTitle("Add New Address");
-
-                //alert.setView(edittext);
-
-                final EditText edt_fullname = (EditText) dialogView.findViewById(R.id.edt_name);
-                final EditText edt_mob = (EditText) dialogView.findViewById(R.id.edt_mob);
-                final EditText edt_address = (EditText) dialogView.findViewById(R.id.edt_address);
-                final EditText edt_city = (EditText) dialogView.findViewById(R.id.edt_city);
-                final EditText edt_state = (EditText) dialogView.findViewById(R.id.edt_state);
-                final EditText edt_country = (EditText) dialogView.findViewById(R.id.edt_country);
-                final EditText edt_pincode = (EditText) dialogView.findViewById(R.id.edt_pincode);
-
-                alert.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-
-
-                        HashMap<String, String> parameters = new HashMap<>();
-
-                        parameters.put("type", "configUserAddress");
-                        parameters.put("iMemberId",memberId);
-                        parameters.put("vName",edt_fullname.getText().toString());
-                        parameters.put("vMobile",edt_mob.getText().toString());
-                        parameters.put("vAddress",edt_address.getText().toString());
-                        parameters.put("vCity",edt_city.getText().toString());
-                        parameters.put("vCountry",edt_country.getText().toString());
-                        parameters.put("vState",edt_state.getText().toString());
-                        parameters.put("vPinCode",edt_pincode.getText().toString());
-
-                        String vName = edt_fullname.getText().toString();
-
-                        String vMobile = edt_mob.getText().toString();
-                        String vAddress = edt_address.getText().toString();
-                        String vCity = edt_city.getText().toString();
-                        String vCountry = edt_country.getText().toString();
-                        String vState = edt_state.getText().toString();
-                        String vPinCode = edt_pincode.getText().toString();
-
-
-                        if(vName.length()>2&& vMobile.length()==10 && vAddress.length()>5 && vCity.length()>1 && vCountry.length()>1 && vState.length()>1 && vPinCode.length()>1)
-                        {
-
-
-                        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
-                        exeWebServer.setLoaderConfig(getActContext(), true, generalFunctions);
-                        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
-                            @Override
-                            public void setResponse(String responseString) {
-
-                                Utils.printLog("Response", "::" + responseString);
-
-                                if (responseString != null && !responseString.equals("")) {
-
-                                    if (generalFunctions.isDataAvail("Action", responseString)) {
-
-                                            String msg = generalFunctions.getJsonValue("message",responseString);
-                                        Toast.makeText(getActContext(),msg,Toast.LENGTH_LONG).show();
-
-
-                                    } else {
-                                        generalFunctions.showGeneralMessage("Error", generalFunctions.getJsonValue("message", responseString));
-                                    }
-                                } else {
-                                    generalFunctions.showGeneralMessage("Error", "Please try again later.");
-                                }
-                            }
-                        });
-                        exeWebServer.execute();
-
-
-                        }
-                        else
-                        {
-
-                            Toast.makeText(getActContext(),"Add all details", Toast.LENGTH_LONG).show();
-
-                        }
-
-
-
-
-
-
-                    }
-                });
-
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-
-                    }
-                });
-
-                alert.show();
-
-
-
-
-
-
-
-            }
-        });
+        setContentView(R.layout.activity_address);
+        titleTxt = (TextView) findViewById(R.id.titleTxt);
 
         generalFunctions = new GeneralFunctions(getActContext());
-        list_images = new ArrayList<>();
+        list_address_items = new ArrayList<>();
         backImgView = (ImageView) findViewById(R.id.backImgView);
         cartImage = (ImageView) findViewById(R.id.imgCart);
-        memberId = generalFunctions.getMemberId();
-        Log.d("MEMBER ID",memberId);
+        btn_add_address = (Button) findViewById(R.id.btn_add_address);
+        loading = (ProgressBar) findViewById(R.id.loading);
 
+        titleTxt.setText("My Addresses");
         backImgView.setOnClickListener(new setOnClickList());
         cartImage.setOnClickListener(new setOnClickList());
-
-
+        btn_add_address.setOnClickListener(new setOnClickList());
         myAddresRecyclerView = (RecyclerView) findViewById(R.id.myAddressRecyclerView);
 
-
-        myAddressRecyclerAdapter = new MyAddressRecyclerAdapter(getActContext(), list_images);
+        myAddressRecyclerAdapter = new MyAddressRecyclerAdapter(getActContext(), list_address_items);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         myAddresRecyclerView.setLayoutManager(mLayoutManager);
         myAddresRecyclerView.setItemAnimator(new DefaultItemAnimator());
         myAddresRecyclerView.setAdapter(myAddressRecyclerAdapter);
 
+        myAddressRecyclerAdapter.setOnItemClickList(this);
         getAddressList();
-
     }
 
-    private void getAddressList() {
+    public void openAddAddress() {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActContext());
+        builder.setTitle("Add New Address");
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.input_box_view, null);
 
 
+        final MaterialEditText nameBox = (MaterialEditText) dialogView.findViewById(R.id.editBox);
+        final MaterialEditText mobileBox = (MaterialEditText) inflater.inflate(R.layout.editbox_form_design, null);
+        final MaterialEditText addressBox = (MaterialEditText) inflater.inflate(R.layout.editbox_form_design, null);
+        final MaterialEditText cityBox = (MaterialEditText) inflater.inflate(R.layout.editbox_form_design, null);
+        final MaterialEditText stateBox = (MaterialEditText) inflater.inflate(R.layout.editbox_form_design, null);
+        final MaterialEditText countryBox = (MaterialEditText) inflater.inflate(R.layout.editbox_form_design, null);
+        final MaterialEditText pinCodeBox = (MaterialEditText) inflater.inflate(R.layout.editbox_form_design, null);
 
-        HashMap<String, String> parameters = new HashMap<>();
+        mobileBox.setId(Utils.generateViewId());
+        addressBox.setId(Utils.generateViewId());
+        cityBox.setId(Utils.generateViewId());
+        stateBox.setId(Utils.generateViewId());
+        countryBox.setId(Utils.generateViewId());
+        pinCodeBox.setId(Utils.generateViewId());
 
-        parameters.put("type", "loadUserAddress");
-        parameters.put("iMemberId",memberId);
+        mobileBox.setLayoutParams(nameBox.getLayoutParams());
+        addressBox.setLayoutParams(nameBox.getLayoutParams());
+        cityBox.setLayoutParams(nameBox.getLayoutParams());
+        stateBox.setLayoutParams(nameBox.getLayoutParams());
+        countryBox.setLayoutParams(nameBox.getLayoutParams());
+        pinCodeBox.setLayoutParams(nameBox.getLayoutParams());
+
+        nameBox.setBothText("Name", "Enter your name");
+        mobileBox.setBothText("Mobile", "Enter your mobile number");
+        addressBox.setBothText("Address", "Enter your address");
+        cityBox.setBothText("City", "Enter your city");
+        stateBox.setBothText("State", "Enter your state");
+        countryBox.setBothText("Country", "Enter your country");
+        pinCodeBox.setBothText("PinCode", "Enter pincode");
 
 
+        ((LinearLayout) dialogView.findViewById(R.id.container)).addView(mobileBox);
+        ((LinearLayout) dialogView.findViewById(R.id.container)).addView(addressBox);
+        ((LinearLayout) dialogView.findViewById(R.id.container)).addView(cityBox);
+        ((LinearLayout) dialogView.findViewById(R.id.container)).addView(stateBox);
+        ((LinearLayout) dialogView.findViewById(R.id.container)).addView(countryBox);
+        ((LinearLayout) dialogView.findViewById(R.id.container)).addView(pinCodeBox);
+
+        builder.setView(dialogView);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
 
 
+        alertDialog = builder.create();
+        alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                boolean nameEntered = Utils.checkText(nameBox) ? true : Utils.setErrorFields(nameBox, "Required");
+                boolean mobileEntered = Utils.checkText(mobileBox) ? true : Utils.setErrorFields(mobileBox, "Required");
+                boolean addressEntered = Utils.checkText(addressBox) ? true : Utils.setErrorFields(addressBox, "Required");
+                boolean cityEntered = Utils.checkText(cityBox) ? true : Utils.setErrorFields(cityBox, "Required");
+                boolean stateEntered = Utils.checkText(stateBox) ? true : Utils.setErrorFields(stateBox, "Required");
+                boolean countryEntered = Utils.checkText(countryBox) ? true : Utils.setErrorFields(countryBox, "Required");
+                boolean pincodeEntered = Utils.checkText(pinCodeBox) ? true : Utils.setErrorFields(pinCodeBox, "Required");
+                if (nameEntered == false || mobileEntered == false || addressEntered == false || cityEntered == false ||
+                        stateEntered == false || countryEntered == false || pincodeEntered == false) {
+                    return;
+                }
+                alertDialog.dismiss();
+                HashMap<String, String> parameters = new HashMap<String, String>();
+
+                parameters.put("type", "configUserAddress");
+                parameters.put("iMemberId", generalFunctions.getMemberId());
+                parameters.put("vName", Utils.getText(nameBox));
+                parameters.put("vMobile", Utils.getText(mobileBox));
+                parameters.put("vAddress", Utils.getText(addressBox));
+                parameters.put("vCity", Utils.getText(cityBox));
+                parameters.put("vCountry", Utils.getText(countryBox));
+                parameters.put("vState", Utils.getText(stateBox));
+                parameters.put("vPinCode", Utils.getText(pinCodeBox));
+                addAddress(parameters);
+            }
+        });
+    }
+
+    public void addAddress(HashMap<String, String> parameters) {
 
         ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
         exeWebServer.setLoaderConfig(getActContext(), true, generalFunctions);
@@ -218,8 +187,43 @@ public class AddressActivity extends AppCompatActivity {
 
                     if (generalFunctions.isDataAvail("Action", responseString)) {
 
+                        generalFunctions.showGeneralMessage("", generalFunctions.getJsonValue("message", responseString));
+                        getAddressList();
+                    } else {
+                        generalFunctions.showGeneralMessage("Error", generalFunctions.getJsonValue("message", responseString));
+                    }
+                } else {
+                    generalFunctions.showGeneralMessage("Error", "Please try again later.");
+                }
+            }
+        });
+        exeWebServer.execute();
 
 
+    }
+
+    private void getAddressList() {
+
+        loading.setVisibility(View.VISIBLE);
+        list_address_items.clear();
+        myAddressRecyclerAdapter.notifyDataSetChanged();
+        HashMap<String, String> parameters = new HashMap<>();
+
+        parameters.put("type", "loadUserAddress");
+        parameters.put("iMemberId", generalFunctions.getMemberId());
+
+        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
+//        exeWebServer.setLoaderConfig(getActContext(), true, generalFunctions);
+        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
+            @Override
+            public void setResponse(String responseString) {
+
+                Utils.printLog("Response", "::" + responseString);
+
+                loading.setVisibility(View.GONE);
+                if (responseString != null && !responseString.equals("")) {
+
+                    if (generalFunctions.isDataAvail("Action", responseString)) {
 
 
                         JSONArray arr = generalFunctions.getJsonArr("message", responseString);
@@ -239,10 +243,6 @@ public class AddressActivity extends AppCompatActivity {
                                 String pincode = generalFunctions.getJsonValue("vPinCode", generalFunctions.getJsonObject(arr, i).toString());
 
 
-
-
-
-
                                 HashMap<String, String> map_data = new HashMap<String, String>();
                                 map_data.put("iAddressId", address_id);
                                 map_data.put("iUserId", user_id);
@@ -255,20 +255,18 @@ public class AddressActivity extends AppCompatActivity {
                                 map_data.put("vPinCode", pincode);
 
 
-                                list_images.add(map_data);
+                                Utils.printLog("iAddressId:loop", "::" + map_data.get("iAddressId"));
+                                list_address_items.add(map_data);
 
                             }
 
                             myAddressRecyclerAdapter.notifyDataSetChanged();
 
-//
-
                         }
                     } else {
                         generalFunctions.showGeneralMessage("Opps!!", generalFunctions.getJsonValue("message", responseString));
                     }
-                }
-                else {
+                } else {
                     generalFunctions.showGeneralMessage("Error", "Please try again later.");
                 }
             }
@@ -276,7 +274,18 @@ public class AddressActivity extends AppCompatActivity {
         exeWebServer.execute();
 
 
+    }
 
+    @Override
+    public void onItemClick(int position, int btn_id) {
+        switch (btn_id) {
+            case 0:
+                Bundle bn = new Bundle();
+                bn.putString("iAddressId", list_address_items.get(position).get("iAddressId"));
+                (new StartActProcess(getActContext())).setOkResult(bn);
+                backImgView.performClick();
+                break;
+        }
     }
 
     public class setOnClickList implements View.OnClickListener {
@@ -290,7 +299,9 @@ public class AddressActivity extends AppCompatActivity {
                 case R.id.imgCart:
                     Intent cart = new Intent(AddressActivity.this, MyCartActivity.class);
                     startActivity(cart);
-
+                    break;
+                case R.id.btn_add_address:
+                    openAddAddress();
                     break;
             }
         }
