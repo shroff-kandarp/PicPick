@@ -38,6 +38,7 @@ public class Utils {
 
     public static int ACT_REQ_CODE_FACEBOO_PHOTO_SELECT = 101;
     public static int ACT_REQ_CODE_INSTA_PHOTO_SELECT = 102;
+    public static int ACT_REQ_CODE_ADDRESS_SELECT = 103;
 
     public static final int MENU_ABOUT_US = 0;
     public static final int MENU_ADDRESS = 1;

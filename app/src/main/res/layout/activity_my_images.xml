@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MyCartActivity">
 
-    <include
-        android:id="@+id/toolbar_include"
-        layout="@layout/design_toolbar_general" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/myImagesRecyclerView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:gravity="center_horizontal"
-        />
+        android:orientation="vertical">
 
+        <include
+            android:id="@+id/toolbar_include"
+            layout="@layout/design_toolbar_general" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/myImagesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
 
-
-
-
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/loading"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+</RelativeLayout>

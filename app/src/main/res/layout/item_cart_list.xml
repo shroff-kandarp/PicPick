@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -17,7 +18,7 @@
                 android:id="@+id/img_mycart"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp" />
 
 
             <LinearLayout
@@ -30,26 +31,26 @@
                 <TextView
                     android:id="@+id/tv_caption"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_margin="5dp"
-                    android:padding="10dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:background="@drawable/transblue_rounded_button"
                     android:layout_height="wrap_content"
-                    android:text="Add caption here!"/>
-
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="top"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:text="Add caption here!"
+                    android:textColor="#2F2F2F"
+                    android:textSize="16sp" />
+                <!--android:background="@drawable/transblue_rounded_button"-->
                 <Button
                     android:id="@+id/btn_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
                     android:background="@drawable/red_rounded_button"
                     android:padding="10dp"
-                    android:layout_margin="5dp"
-                    android:layout_gravity="center"
-                    android:textColor="@color/white"
-                    android:text="Delete"/>
+                    android:text="Delete"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
