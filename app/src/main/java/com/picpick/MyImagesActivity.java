@@ -26,7 +26,7 @@ import java.util.HashMap;
  * Created by Ravi on 22-01-2017.
  */
 
-public class MyImages extends AppCompatActivity {
+public class MyImagesActivity extends AppCompatActivity {
 
     private String memberId;
     GeneralFunctions generalFunctions;
@@ -38,7 +38,7 @@ public class MyImages extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_images);
+        setContentView(R.layout.activity_my_images);
 
         generalFunctions = new GeneralFunctions(getActContext());
         list_images = new ArrayList<>();
@@ -137,10 +137,10 @@ public class MyImages extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.backImgView:
-                    MyImages.super.onBackPressed();
+                    MyImagesActivity.super.onBackPressed();
                     break;
                 case R.id.imgCart:
-                    Intent cart = new Intent(MyImages.this, MyCartActivity.class);
+                    Intent cart = new Intent(MyImagesActivity.this, MyCartActivity.class);
                     startActivity(cart);
 
                     break;
@@ -149,6 +149,6 @@ public class MyImages extends AppCompatActivity {
     }
 
     public Context getActContext() {
-        return MyImages.this;
+        return MyImagesActivity.this;
     }
 }
