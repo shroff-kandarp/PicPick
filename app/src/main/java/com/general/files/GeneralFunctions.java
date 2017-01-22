@@ -1,10 +1,15 @@
 package com.general.files;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.facebook.login.LoginManager;
 import com.picpick.LauncherActivity;
@@ -14,6 +19,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 /**
@@ -21,6 +31,7 @@ import java.util.HashMap;
  */
 public class GeneralFunctions {
     Context mContext;
+    public static final int MY_PERMISSIONS_REQUEST = 51;
 
     public GeneralFunctions(Context mContext) {
         this.mContext = mContext;
@@ -221,4 +232,70 @@ public class GeneralFunctions {
         LoginManager.getInstance().logOut();
     }
 
+    public boolean isAllPermissionGranted() {
+        int permissionCheck_fine = ContextCompat.checkSelfPermission(mContext,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        int permissionCheck_coarse = ContextCompat.checkSelfPermission(mContext,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        int permissionCheck_storage = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionCheck_camera = ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA);
+
+        if (permissionCheck_fine != PackageManager.PERMISSION_GRANTED || permissionCheck_coarse != PackageManager.PERMISSION_GRANTED
+                || permissionCheck_storage != PackageManager.PERMISSION_GRANTED || permissionCheck_camera != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions((Activity) mContext,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_REQUEST);
+
+
+            // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
+            return false;
+        }
+
+        return true;
+    }
+
+    public File saveImage(Bitmap bmp) {
+
+        int byteSize = bmp.getRowBytes() * bmp.getHeight();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(byteSize);
+        bmp.copyPixelsToBuffer(byteBuffer);
+
+//                    byte[] byteArray = byteBuffer.array();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        ByteArrayInputStream bs = new ByteArrayInputStream(byteArray);
+
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/" + Utils.storedImageFolderName);
+        myDir.mkdirs();
+
+        File file = new File(myDir, Utils.storedImageName);
+
+        try {
+
+            FileOutputStream out = new FileOutputStream(file);
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = bs.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            bs.close();
+            out.close();
+            Utils.printLog("Image", "Saving:SUCCESS");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utils.printLog("Image", "Saving:Error");
+        }
+
+        return file;
+    }
 }

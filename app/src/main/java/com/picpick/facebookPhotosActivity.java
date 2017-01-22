@@ -1,7 +1,9 @@
 package com.picpick;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +17,14 @@ import com.adapter.FacebookPhotoRecyclerAdapter;
 import com.general.files.DownloadImage;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
+import com.general.files.StartCropper;
 import com.utils.Utils;
 import com.view.GridAutofitLayoutManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,6 +47,8 @@ public class FacebookPhotosActivity extends AppCompatActivity {
     ProgressBar loading;
 
     String storedAccessToken = "";
+
+    StartCropper startCropper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +102,20 @@ public class FacebookPhotosActivity extends AppCompatActivity {
     }
 
     public void downloadSelectedPhoto(String url) {
-
+        Utils.printLog("Image", "url:" + url);
         DownloadImage downloadImg = new DownloadImage(getActContext(), url);
         downloadImg.setImageDownloadList(new DownloadImage.ImageDownloadListener() {
             @Override
             public void onImageDownload(Bitmap bmp) {
                 Utils.printLog("Image", "Download:Success");
+
+                if (generalFunctions.isAllPermissionGranted()) {
+                    Utils.printLog("Image", "Saving");
+
+                    File file = generalFunctions.saveImage(bmp);
+
+                    startCropper = new StartCropper(getActContext(),Uri.fromFile(file));
+                }
             }
         });
         downloadImg.execute();
@@ -157,7 +171,7 @@ public class FacebookPhotosActivity extends AppCompatActivity {
         adapter_albumPhoto.notifyDataSetChanged();
 
         String albumId = facebookAlbumsList.get(position).get("ALBUM_ID");
-        String facebookAlbumPhotoUrl = "https://graph.facebook.com/" + albumId + "/photos?fields=album,height,icon,id,images,from,name,link,event,created_time,can_tag&access_token="+storedAccessToken;
+        String facebookAlbumPhotoUrl = "https://graph.facebook.com/" + albumId + "/photos?fields=album,height,icon,id,images,from,name,link,event,created_time,can_tag&access_token=" + storedAccessToken;
 
         Utils.printLog("UrlBanner", facebookAlbumPhotoUrl);
         ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(facebookAlbumPhotoUrl, true);
@@ -227,6 +241,13 @@ public class FacebookPhotosActivity extends AppCompatActivity {
                     FacebookPhotosActivity.super.onBackPressed();
                     break;
             }
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // handle result of pick image chooser
+        if (startCropper != null) {
+            startCropper.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

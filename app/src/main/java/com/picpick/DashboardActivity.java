@@ -1,17 +1,13 @@
 package com.picpick;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -29,13 +25,13 @@ import com.adapter.DrawerAdapter;
 import com.facebook.FacebookSdk;
 import com.general.files.GeneralFunctions;
 import com.general.files.StartActProcess;
+import com.general.files.StartCropper;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.utils.Utils;
 import com.view.CreateRoundedView;
 import com.view.SelectableRoundedImageView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class DashboardActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -56,6 +52,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     public static final String CLIENT_SECRET = "ee2c99883f2f4e378f4ab413dbad66ce ";
     public static final String CALLBACK_URL = "https://www.instagram.com/";
 
+    StartCropper startCropper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,13 +104,6 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             }
         }
 
-
-
-
-
-
-
-
     }
 //
 //    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
@@ -135,54 +125,13 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 //    };
 
 
-
-
-
     public void onFacebookImageClick(View v) {
         (new StartActProcess(getActContext())).startActForResult(FacebookPhotosActivity.class, Utils.ACT_REQ_CODE_FACEBOO_PHOTO_SELECT);
     }
 
     public void onSelectImageClick(View view) {
-        CropImage.startPickImageActivity(this);
+        startCropper = new StartCropper(getActContext(), null);
     }
-
-    @Override
-    @SuppressLint("NewApi")
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // handle result of pick image chooser
-        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Uri imageUri = CropImage.getPickImageResultUri(this, data);
-
-            // For API >= 23 we need to check specifically that we have permissions to read external storage.
-            if (CropImage.isReadExternalStoragePermissionsRequired(this, imageUri)) {
-                // request permissions and handle the result in onRequestPermissionsResult()
-                mCropImageUri = imageUri;
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
-            } else {
-                // no permissions required or already grunted, can start crop image activity
-                startCropImageActivity(imageUri);
-            }
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                    img.setImageBitmap(bitmap);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-    }
-
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
@@ -197,8 +146,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
 
     private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri)
-                .start(this);
+        startCropper = new StartCropper(getActContext(), imageUri);
     }
 
     public class setOnClickList implements View.OnClickListener {
@@ -260,7 +208,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
             case Utils.MENU_ADDRESS:
 
-                Intent i = new Intent(DashboardActivity.this,AddressActivity.class);
+                Intent i = new Intent(DashboardActivity.this, AddressActivity.class);
                 startActivity(i);
 
                 break;
@@ -285,8 +233,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     }
 
 
-    public void onInstagramClick(View view)
-    {
+    public void onInstagramClick(View view) {
 
 
 //        Intent i = new Intent(DashboardActivity.this, InstaSample.class);
@@ -321,5 +268,12 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     };
 
 
-
+    @Override
+    @SuppressLint("NewApi")
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // handle result of pick image chooser
+        if (startCropper != null) {
+            startCropper.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }
