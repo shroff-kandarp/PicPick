@@ -49,6 +49,16 @@
                 android:textColor="#FFFFFF"
                 android:textSize="@dimen/txt_size_16"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imgCart"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"
+                android:src="@mipmap/ic_cart" />
+
         </LinearLayout>
 
 

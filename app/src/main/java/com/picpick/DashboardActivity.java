@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class DashboardActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     DrawerLayout mDrawerLayout;
-    ImageView menuImgView;
+    ImageView menuImgView, imgCart1;
     Uri mCropImageUri;
     ListView menuListView;
     DrawerAdapter drawerAdapter;
@@ -78,6 +78,10 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
         menuImgView.setColorFilter(Color.parseColor("#FFFFFF"));
         menuImgView.setOnClickListener(new setOnClickList());
+
+        imgCart1 = (ImageView) findViewById(R.id.menuCartView);
+        imgCart1.setOnClickListener(new setOnClickList());
+
 
         new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0),
                 getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar_include)));
@@ -156,6 +160,10 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             if (view.getId() == menuImgView.getId()) {
                 loadDrawer();
             }
+            if (view.getId() == imgCart1.getId()) {
+                Intent cart = new Intent(DashboardActivity.this, MyCartActivity.class);
+                startActivity(cart);
+            }
         }
     }
 
@@ -187,7 +195,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         }
 
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "About Us", "" + Utils.MENU_ABOUT_US});
-        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Gallery", "" + Utils.MENU_VIDEOS});
+        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "My Images", "" + Utils.MENU_IMAGES});
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "My Address", "" + Utils.MENU_ADDRESS});
 
         if (generalFunc.isUserLoggedIn()) {
@@ -210,6 +218,13 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
                 Intent i = new Intent(DashboardActivity.this, AddressActivity.class);
                 startActivity(i);
+
+                break;
+
+            case Utils.MENU_IMAGES:
+
+                Intent i1 = new Intent(DashboardActivity.this, MyImages.class);
+                startActivity(i1);
 
                 break;
 
