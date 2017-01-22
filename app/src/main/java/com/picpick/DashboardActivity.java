@@ -223,7 +223,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
             case Utils.MENU_IMAGES:
 
-                Intent i1 = new Intent(DashboardActivity.this, MyImages.class);
+                Intent i1 = new Intent(DashboardActivity.this, MyImagesActivity.class);
                 startActivity(i1);
 
                 break;

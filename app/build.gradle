@@ -46,6 +46,5 @@ dependencies {
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.github.sayyam:instagramapi:0.0.6'
 
 }

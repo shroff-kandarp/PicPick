@@ -147,14 +147,14 @@ public class InstaPhotosActivity extends AppCompatActivity {
                                     generalFunctions.getJsonValue("standard_resolution",
                                             generalFunctions.getJsonValue("images", obj_temp.toString()))));
 
-                            Utils.printLog("PHOTO_PATH","::"+map.get("PHOTO_PATH"));
+                            Utils.printLog("PHOTO_PATH", "::" + map.get("PHOTO_PATH"));
                             instaPhotoList.add(map);
                         }
 
                         adapter.notifyDataSetChanged();
                     }
                 } else {
-                    generalFunctions.showGeneralMessage("","Please try again later");
+                    generalFunctions.showGeneralMessage("", "Please try again later");
                 }
             }
         });
