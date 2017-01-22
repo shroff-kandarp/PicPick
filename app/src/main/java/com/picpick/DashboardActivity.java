@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,6 +27,7 @@ import com.general.files.StartActProcess;
 import com.general.files.StartCropper;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.utils.CommonUtilities;
 import com.utils.Utils;
 import com.view.CreateRoundedView;
 import com.view.SelectableRoundedImageView;
@@ -46,8 +46,6 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     TextView titleTxt;
     GeneralFunctions generalFunc;
 
-
-    private InstagramApp instaObj;
     public static final String CLIENT_ID = "c78d0e33cbcb440db85ff8f77bdcde00";
     public static final String CLIENT_SECRET = "ee2c99883f2f4e378f4ab413dbad66ce ";
     public static final String CALLBACK_URL = "https://www.instagram.com/";
@@ -239,33 +237,52 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 //        Intent i = new Intent(DashboardActivity.this, InstaSample.class);
 //        startActivity(i);
 //
-        instaObj = new InstagramApp(this, CLIENT_ID,
-                CLIENT_SECRET, CALLBACK_URL);
-        instaObj.setListener(listener);
+//        instaObj = new InstagramApp(this, CLIENT_ID,
+//                CLIENT_SECRET, CALLBACK_URL);
+//        instaObj.setListener(listener);
+//
+//
+//        instaObj.authorize();
 
+        InstagramDialog instaDialog = new InstagramDialog(getActContext(), CommonUtilities.INSTA_AUTH_URL,
+                CommonUtilities.INSTA_CALLBACK_URL, new InstagramDialog.InstagramDialogListener() {
+            @Override
+            public void onSuccess(String code) {
+                Utils.printLog("CODE:","::"+code);
+            }
 
-        instaObj.authorize();
+            @Override
+            public void onCancel() {
 
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+
+        instaDialog.show();
 
     }
 
-    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
-
-        @Override
-        public void onSuccess() {
-
-            Log.e("Userid", instaObj.getId());
-            Log.e("Name", instaObj.getName());
-            Log.e("UserName", instaObj.getUserName());
-
-        }
-
-        @Override
-        public void onFail(String error) {
-            Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT)
-                    .show();
-        }
-    };
+//    InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
+//
+//        @Override
+//        public void onSuccess() {
+//
+//            Log.e("Userid", instaObj.getId());
+//            Log.e("Name", instaObj.getName());
+//            Log.e("UserName", instaObj.getUserName());
+//
+//        }
+//
+//        @Override
+//        public void onFail(String error) {
+//            Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT)
+//                    .show();
+//        }
+//    };
 
 
     @Override
